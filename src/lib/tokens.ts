@@ -22,7 +22,7 @@ export const DEFAULT_THEME: ThemeName = 'terminal';
 export const DEFAULT_MODE: Mode = 'dark';
 export const DEFAULT_TYPE: TypeName = 'humanist';
 
-export const THEMES: Record<ThemeName, Record<Mode, ColorSet>> = {
+export const THEMES: Record<TheㅎmeName, Record<Mode, ColorSet>> = {
   terminal: {
     light: {
       bg: '#fafafa', surface: '#ffffff', surfaceAlt: '#f0f0f0',

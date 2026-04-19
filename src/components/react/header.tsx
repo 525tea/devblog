@@ -45,18 +45,18 @@ export function Header({ onNav, onOpenSearch }: HeaderProps) {
             <div key={cat.slug} style={{ position: 'relative' }} onMouseEnter={() => setHoverCat(cat.slug)}>
               <button
                 onClick={() => onNav({ route: 'category', cat: cat.slug })}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px 12px', fontSize: 13.5, fontWeight: 500, color: hoverCat === cat.slug ? t.text : t.textMuted, fontFamily: type.body, transition: 'color 0.15s' }}>
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '10px 12px', fontSize: 15, fontWeight: 500, color: hoverCat === cat.slug ? t.text : t.textMuted, fontFamily: type.body, transition: 'color 0.15s' }}>
                 {cat.name}
               </button>
               {hoverCat === cat.slug && (
                 <div style={{ position: 'absolute', top: '100%', left: 0, minWidth: 220, padding: 8, background: t.surface, border: `1px solid ${t.border}`, boxShadow: SHADOW.lg, borderRadius: 8, zIndex: 50 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 0.8, color: t.textSubtle, padding: '6px 10px 8px', textTransform: 'uppercase' }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: 0.8, color: t.textSubtle, padding: '6px 10px 8px', textTransform: 'uppercase' }}>
                     {cat.slug === 'project' ? 'Projects' : 'Topics'}
                   </div>
                   {cat.children.map(sub => (
                     <button key={sub.slug}
                       onClick={() => { setHoverCat(null); onNav({ route: 'sub', cat: cat.slug, sub: sub.slug }); }}
-                      style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', borderRadius: 5, color: t.text, fontSize: 13, fontFamily: type.body }}
+                      style={{ display: 'flex', width: '100%', justifyContent: 'space-between', alignItems: 'center', padding: '8px 10px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', borderRadius: 5, color: t.text, fontSize: 14, fontFamily: type.body }}
                       onMouseEnter={e => (e.currentTarget.style.background = t.surfaceAlt)}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
                       <span>{sub.name}</span>

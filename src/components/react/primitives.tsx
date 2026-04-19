@@ -18,7 +18,7 @@ export function Tag({ children, onClick, variant = 'default', active = false }: 
   return (
     <span onClick={onClick} style={{
       display: 'inline-flex', alignItems: 'center', padding: '3px 10px',
-      fontSize: 11, fontWeight: 500, fontFamily: type.mono, borderRadius: 6,
+      fontSize: 12.5, fontWeight: 500, fontFamily: type.mono, borderRadius: 6,
       cursor: onClick ? 'pointer' : 'default', letterSpacing: 0.2, ...style,
     }}>{children}</span>
   );
@@ -89,63 +89,63 @@ export function Footer({ onNav }: { onNav: (r: FooterRoute) => void }) {
           <div style={{ minWidth: 200 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}>
               <span style={{ display: 'inline-block', width: 10, height: 10, borderRadius: 2, background: t.accent }} />
-              <span style={{ fontFamily: type.display, fontSize: 18, fontWeight: 700, letterSpacing: -0.5, color: t.text }}>README</span>
+              <span style={{ fontFamily: type.display, fontSize: 20, fontWeight: 700, letterSpacing: -0.5, color: t.text }}>README</span>
             </div>
-            <p style={{ fontSize: 12, color: t.textMuted, lineHeight: 1.6, maxWidth: 280 }}>
+            <p style={{ fontSize: 13, color: t.textMuted, lineHeight: 1.6, maxWidth: 280 }}>
               A full-stack engineer's log — backend systems, infra, and the projects in between.
             </p>
           </div>
 
           <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 24 }}>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: t.textSubtle, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 10 }}>Topics</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: t.textSubtle, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 10 }}>Topics</div>
               {[
                 { label: 'Backend', hint: 'Java · Python · API', cat: 'backend' },
                 { label: 'CS', hint: 'OS · Network · 분산 시스템', cat: 'cs' },
                 { label: 'DevOps', hint: '인프라 · K8s · 모니터링', cat: 'devops' },
               ].map(i => (
                 <div key={i.label} onClick={() => onNav({ route: 'category', cat: i.cat })}
-                  style={{ fontSize: 12.5, color: t.textMuted, padding: '4px 0', cursor: 'pointer', lineHeight: 1.3 }}
+                  style={{ fontSize: 13.5, color: t.textMuted, padding: '4px 0', cursor: 'pointer', lineHeight: 1.3 }}
                   onMouseEnter={e => (e.currentTarget.style.color = t.text)}
                   onMouseLeave={e => (e.currentTarget.style.color = t.textMuted)}>
                   {i.label}
-                  <div style={{ fontSize: 10.5, color: t.textSubtle, marginTop: 1 }}>{i.hint}</div>
+                  <div style={{ fontSize: 11.5, color: t.textSubtle, marginTop: 1 }}>{i.hint}</div>
                 </div>
               ))}
             </div>
 
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: t.textSubtle, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 10 }}>About</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: t.textSubtle, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 10 }}>About</div>
               <div onClick={() => onNav({ route: 'profile' })}
-                style={{ fontSize: 12.5, color: t.textMuted, padding: '4px 0', cursor: 'pointer', lineHeight: 1.3 }}
+                style={{ fontSize: 13.5, color: t.textMuted, padding: '4px 0', cursor: 'pointer', lineHeight: 1.3 }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.text)}
                 onMouseLeave={e => (e.currentTarget.style.color = t.textMuted)}>
                 Profile
-                <div style={{ fontSize: 10.5, color: t.textSubtle, marginTop: 1 }}>소개 · 기술 스택</div>
+                <div style={{ fontSize: 11.5, color: t.textSubtle, marginTop: 1 }}>소개 · 기술 스택</div>
               </div>
               <div onClick={() => onNav({ route: 'tags' })}
-                style={{ fontSize: 12.5, color: t.textMuted, padding: '4px 0', cursor: 'pointer', lineHeight: 1.3 }}
+                style={{ fontSize: 13.5, color: t.textMuted, padding: '4px 0', cursor: 'pointer', lineHeight: 1.3 }}
                 onMouseEnter={e => (e.currentTarget.style.color = t.text)}
                 onMouseLeave={e => (e.currentTarget.style.color = t.textMuted)}>
                 Tags
-                <div style={{ fontSize: 10.5, color: t.textSubtle, marginTop: 1 }}>태그 모아보기</div>
+                <div style={{ fontSize: 11.5, color: t.textSubtle, marginTop: 1 }}>태그 모아보기</div>
               </div>
             </div>
           </div>
 
           <div style={{ minWidth: 200 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: t.textSubtle, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 10 }}>Visits</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: t.textSubtle, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 10 }}>Visits</div>
             <div style={{ display: 'flex', gap: 18, fontFamily: type.mono }}>
               <div>
-                <div style={{ fontSize: 11, color: t.textSubtle }}>today</div>
-                <div style={{ fontSize: 18, color: t.text, fontWeight: 600 }}>—</div>
+                <div style={{ fontSize: 12, color: t.textSubtle }}>today</div>
+                <div style={{ fontSize: 20, color: t.text, fontWeight: 600 }}>—</div>
               </div>
               <div>
-                <div style={{ fontSize: 11, color: t.textSubtle }}>total</div>
-                <div style={{ fontSize: 18, color: t.text, fontWeight: 600 }}>—</div>
+                <div style={{ fontSize: 12, color: t.textSubtle }}>total</div>
+                <div style={{ fontSize: 20, color: t.text, fontWeight: 600 }}>—</div>
               </div>
             </div>
-            <div style={{ fontSize: 10.5, color: t.textSubtle, fontFamily: type.mono, marginTop: 4 }}>via GoatCounter</div>
+            <div style={{ fontSize: 11.5, color: t.textSubtle, fontFamily: type.mono, marginTop: 4 }}>via GoatCounter</div>
             <div style={{ marginTop: 14, display: 'flex', gap: 10 }}>
               <a href="https://github.com/525tea" title="GitHub" style={iconLinkStyle(t)}><Icons.Github size={16} /></a>
               <a href="mailto:jene0028@gmail.com" title="Email" style={iconLinkStyle(t)}><Icons.Mail size={16} /></a>
@@ -153,8 +153,8 @@ export function Footer({ onNav }: { onNav: (r: FooterRoute) => void }) {
           </div>
         </div>
 
-        <div style={{ paddingTop: 20, borderTop: `1px solid ${t.border}`, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', fontSize: 11, color: t.textSubtle }}>
-          <span>© 2026 README. Built with Astro · Hosted on GitHub Pages.</span>
+        <div style={{ paddingTop: 20, borderTop: `1px solid ${t.border}`, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', fontSize: 12, color: t.textSubtle }}>
+          <span>© 2026 README. Built with Astro · Hosted on Cloudflare Pages.</span>
           <span>jene0028@gmail.com · github.com/525tea</span>
         </div>
       </div>

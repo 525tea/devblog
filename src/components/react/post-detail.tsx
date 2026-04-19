@@ -116,15 +116,15 @@ export function PostDetailPage({ postId, onNav }: Props) {
         <div style={{ marginTop: 40, padding: 20, border: `1px solid ${t.border}`, borderRadius: 8, background: t.surfaceAlt, display: 'flex', gap: 16, alignItems: 'center' }}>
           <div style={{ width: 56, height: 56, borderRadius: '50%', background: t.accent, color: t.accentText, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 22, fontFamily: type.display, flexShrink: 0 }}>J</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 15, fontWeight: 600, color: t.text }}>525tea</div>
-            <div style={{ fontSize: 12.5, color: t.textMuted, lineHeight: 1.5, marginTop: 2 }}>Backend-leaning full-stack engineer — Java / Spring, Python, Postgres, K8s.</div>
+            <div style={{ fontSize: 16, fontWeight: 600, color: t.text }}>525tea</div>
+            <div style={{ fontSize: 13.5, color: t.textMuted, lineHeight: 1.5, marginTop: 2 }}>Backend-leaning full-stack engineer — Java / Spring, Python, Postgres, K8s.</div>
           </div>
           <Button variant="ghost" size="sm" icon={<Icons.Github size={13} />}>Follow</Button>
         </div>
 
         {/* Comments */}
         <div style={{ marginTop: 48, paddingTop: 28, borderTop: `1px solid ${t.border}` }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, color: t.textSubtle, textTransform: 'uppercase', marginBottom: 20, fontFamily: type.body }}>
+          <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1, color: t.textSubtle, textTransform: 'uppercase', marginBottom: 20, fontFamily: type.body }}>
             Comments
           </div>
           <GiscusComments />
@@ -134,14 +134,14 @@ export function PostDetailPage({ postId, onNav }: Props) {
       {/* Right: TOC */}
       <aside style={{ fontFamily: type.body }}>
         <div style={{ position: 'sticky', top: 80 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: 1, color: t.textSubtle, textTransform: 'uppercase', marginBottom: 12 }}>On this page</div>
+          <div style={{ fontSize: 11.5, fontWeight: 700, letterSpacing: 1, color: t.textSubtle, textTransform: 'uppercase', marginBottom: 12 }}>On this page</div>
           <nav style={{ borderLeft: `1px solid ${t.border}`, paddingLeft: 1 }}>
             {SECTIONS.map(s => {
               const active = s.id === activeId;
               return (
                 <a key={s.id} href={`#${s.id}`}
                   onClick={(e) => { e.preventDefault(); document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }}
-                  style={{ display: 'block', padding: '6px 12px', marginLeft: s.level === 2 ? 12 : 0, borderLeft: active ? `2px solid ${t.accent}` : '2px solid transparent', fontSize: s.level === 2 ? 12 : 12.5, color: active ? t.text : t.textMuted, fontWeight: active ? 600 : 400, textDecoration: 'none', lineHeight: 1.5, transition: 'all 0.15s' }}>
+                  style={{ display: 'block', padding: '6px 12px', marginLeft: s.level === 2 ? 12 : 0, borderLeft: active ? `2px solid ${t.accent}` : '2px solid transparent', fontSize: s.level === 2 ? 13 : 13.5, color: active ? t.text : t.textMuted, fontWeight: active ? 600 : 400, textDecoration: 'none', lineHeight: 1.5, transition: 'all 0.15s' }}>
                   {s.title}
                 </a>
               );
