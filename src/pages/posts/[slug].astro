@@ -1,0 +1,394 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { PostHeader, PostFooter } from '@/components/react/post-shell';
+import { CATEGORIES } from '@/lib/data';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const { title, date, excerpt, cat, sub, tags, readMin, series } = post.data;
+
+const catDef = CATEGORIES.find(c => c.slug === cat);
+const subDef = catDef?.children.find(s => s.slug === sub);
+const dateStr = date.toISOString().slice(0, 10);
+const h2s = headings.filter(h => h.depth === 2 || h.depth === 3);
+---
+
+<BaseLayout title={title} description={excerpt}>
+  <PostHeader client:load />
+
+  <div class="post-wrap">
+    <!-- Left: breadcrumb -->
+    <aside class="post-left">
+      <a href="/" class="back-link">← {subDef?.name ?? catDef?.name ?? cat}</a>
+      <div class="bc-label">Breadcrumb</div>
+      <div class="bc-tree">
+        <div>{catDef?.name}</div>
+        <div class="bc-sub">· {subDef?.name}</div>
+        <div class="bc-cur">· Current</div>
+      </div>
+      {series && (
+        <div class="series-box">
+          <div class="series-label">Series</div>
+          <div class="series-title">{series}</div>
+        </div>
+      )}
+    </aside>
+
+    <!-- Center: article -->
+    <main class="post-main">
+      <header class="article-header">
+        <div class="article-tags">
+          <span class="tag">{catDef?.name}</span>
+          <span class="tag">{subDef?.name}</span>
+          {tags.slice(0, 3).map(t => <span class="tag">#{t}</span>)}
+        </div>
+        <h1 class="article-title">{title}</h1>
+        <p class="article-excerpt">{excerpt}</p>
+        <div class="article-meta">
+          <span>{dateStr}</span>
+          {readMin && <span>{readMin} min read</span>}
+        </div>
+      </header>
+
+      <article class="prose">
+        <Content />
+      </article>
+
+      <div class="article-tags-bottom">
+        {tags.map(t => <span class="tag">#{t}</span>)}
+      </div>
+
+      <div class="author-box">
+        <div class="author-avatar">J</div>
+        <div class="author-info">
+          <div class="author-name">525tea</div>
+          <div class="author-bio">Backend-leaning full-stack engineer — Java / Spring, Python, Postgres, K8s.</div>
+        </div>
+        <a href="https://github.com/525tea" target="_blank" rel="noopener" class="author-link">GitHub</a>
+      </div>
+    </main>
+
+    <!-- Right: TOC -->
+    <aside class="post-right">
+      {h2s.length > 0 && (
+        <>
+          <div class="toc-label">On this page</div>
+          <nav class="toc">
+            {h2s.map(h => (
+              <a href={`#${h.slug}`} class={`toc-item toc-d${h.depth}`}>
+                {h.text}
+              </a>
+            ))}
+          </nav>
+        </>
+      )}
+    </aside>
+  </div>
+
+  <PostFooter client:load />
+</BaseLayout>
+
+<style>
+  /* ── Layout ─────────────────────────────────────────── */
+  .post-wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    display: grid;
+    grid-template-columns: 220px 1fr 240px;
+    gap: 40px;
+  }
+
+  /* ── Left sidebar ────────────────────────────────────── */
+  .post-left {
+    font-family: var(--font-body);
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    height: fit-content;
+  }
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--textMuted);
+    text-decoration: none;
+    margin-bottom: 14px;
+  }
+  .back-link:hover { color: var(--text); }
+  .bc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--textSubtle);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .bc-tree { font-size: 12.5px; line-height: 1.7; color: var(--textMuted); }
+  .bc-sub { padding-left: 10px; }
+  .bc-cur { padding-left: 20px; color: var(--text); font-weight: 500; }
+  .series-box {
+    margin-top: 24px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surfaceAlt);
+  }
+  .series-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-family: var(--font-mono);
+  }
+  .series-title { font-size: 13px; color: var(--text); font-weight: 600; line-height: 1.4; }
+
+  /* ── Main article ────────────────────────────────────── */
+  .post-main {
+    min-width: 0;
+    max-width: 720px;
+    justify-self: center;
+    width: 100%;
+  }
+  .article-header { margin-bottom: 40px; }
+  .article-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: var(--font-mono);
+    border-radius: 6px;
+    background: var(--tag);
+    color: var(--tagText);
+    border: 1px solid var(--border);
+  }
+  .article-title {
+    margin: 0;
+    font-size: 42px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -1px;
+    line-height: 1.15;
+    color: var(--text);
+  }
+  .article-excerpt {
+    margin: 20px 0 0;
+    font-size: 18px;
+    color: var(--textMuted);
+    line-height: 1.6;
+    font-family: var(--font-body);
+  }
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--textSubtle);
+  }
+  .article-tags-bottom {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .author-box {
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surfaceAlt);
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .author-avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accentText);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 22px;
+    font-family: var(--font-display);
+    flex-shrink: 0;
+  }
+  .author-info { flex: 1; }
+  .author-name { font-size: 16px; font-weight: 600; color: var(--text); font-family: var(--font-body); }
+  .author-bio { font-size: 13.5px; color: var(--textMuted); line-height: 1.5; margin-top: 2px; font-family: var(--font-body); }
+  .author-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    font-family: var(--font-body);
+    flex-shrink: 0;
+  }
+  .author-link:hover { border-color: var(--borderStrong); }
+
+  /* ── Right TOC ───────────────────────────────────────── */
+  .post-right {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+    height: fit-content;
+    font-family: var(--font-body);
+  }
+  .toc-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--textSubtle);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .toc {
+    border-left: 1px solid var(--border);
+    padding-left: 1px;
+    display: flex;
+    flex-direction: column;
+  }
+  .toc-item {
+    display: block;
+    padding: 6px 12px;
+    font-size: 13px;
+    color: var(--textMuted);
+    text-decoration: none;
+    line-height: 1.5;
+    border-left: 2px solid transparent;
+    transition: all 0.15s;
+  }
+  .toc-item:hover { color: var(--text); border-left-color: var(--borderStrong); }
+  .toc-d3 { margin-left: 12px; font-size: 12px; }
+
+  /* ── Prose (MDX content) ─────────────────────────────── */
+  .prose {
+    font-size: 16.5px;
+    line-height: 1.75;
+    color: var(--text);
+    font-family: var(--font-body);
+  }
+  .prose h2 {
+    margin: 40px 0 16px;
+    font-size: 26px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--text);
+    scroll-margin-top: 80px;
+  }
+  .prose h3 {
+    margin: 28px 0 12px;
+    font-size: 20px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--text);
+    scroll-margin-top: 80px;
+  }
+  .prose h4 {
+    margin: 20px 0 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .prose p { margin: 0 0 16px; }
+  .prose a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .prose a:hover { opacity: 0.8; }
+  .prose strong { font-weight: 700; color: var(--text); }
+  .prose em { font-style: italic; }
+  .prose ul, .prose ol {
+    margin: 0 0 16px;
+    padding-left: 24px;
+  }
+  .prose li { margin-bottom: 6px; }
+  .prose hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+  .prose blockquote {
+    margin: 20px 0;
+    padding: 12px 16px;
+    border-left: 3px solid var(--accent);
+    background: var(--surfaceAlt);
+    border-radius: 0 6px 6px 0;
+    color: var(--textMuted);
+    font-style: italic;
+  }
+  .prose blockquote p { margin: 0; }
+  .prose pre {
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--codeBg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 13.5px;
+    color: var(--code);
+    line-height: 1.6;
+    overflow-x: auto;
+  }
+  .prose code {
+    font-family: var(--font-mono);
+    background: var(--codeBg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.9em;
+    color: var(--code);
+  }
+  .prose pre code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    border-radius: 0;
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .prose th, .prose td {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    text-align: left;
+  }
+  .prose th {
+    background: var(--surfaceAlt);
+    font-weight: 600;
+    color: var(--text);
+  }
+  .prose td { color: var(--textMuted); }
+</style>

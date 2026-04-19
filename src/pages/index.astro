@@ -1,7 +1,11 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import App from '@/components/react/app';
+
+const publishedPosts = await getCollection('posts', ({ data }) => !data.draft);
+const publishedSlugs = publishedPosts.map(p => p.slug);
 ---
 <BaseLayout>
-  <App client:load />
+  <App publishedSlugs={publishedSlugs} client:load />
 </BaseLayout>

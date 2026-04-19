@@ -7,21 +7,32 @@ import { TweaksPanel, TweaksGate } from './tweaks';
 import { HomePage, ProjectCategoryPage, SubProjectPage, GeneralCategoryPage, TagsPage, type Route } from './pages';
 import { PostDetailPage } from './post-detail';
 import { ProfilePage } from './profile';
-import { CATEGORIES } from '@/lib/data';
+import { CATEGORIES, POSTS } from '@/lib/data';
 
-function AppInner() {
+interface AppProps { publishedSlugs?: string[]; }
+
+function AppInner({ publishedSlugs = [] }: AppProps) {
   const [route, setRoute] = useState<Route>({ route: 'home' });
   const [searchOpen, setSearchOpen] = useState(false);
   const [tweaksOpen, setTweaksOpen] = useState(false);
   const [tweaksGateOpen, setTweaksGateOpen] = useState(false);
 
+  const publishedSet = new Set(publishedSlugs);
+
   // Check if already authenticated this session
   const isAdminSession = () => { try { return sessionStorage.getItem('readme:admin') === '1'; } catch { return false; } };
 
   const onNav = useCallback((r: Route) => {
+    if (r.route === 'post') {
+      const post = POSTS.find(p => p.id === r.id);
+      if (post && publishedSet.has(post.slug)) {
+        window.location.href = `/posts/${post.slug}`;
+        return;
+      }
+    }
     setRoute(r);
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+  }, [publishedSlugs]);
 
   // ⌘K = 검색 / Ctrl+Shift+T = Tweaks (숨겨진 단축키)
   useEffect(() => {
@@ -81,10 +92,10 @@ function AppInner() {
   );
 }
 
-function App() {
+function App({ publishedSlugs }: AppProps) {
   return (
     <ThemeProvider>
-      <AppInner />
+      <AppInner publishedSlugs={publishedSlugs} />
     </ThemeProvider>
   );
 }
