@@ -1,0 +1,133 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+const {
+  title = 'README — Backend notes & system design',
+  description = 'Full-stack engineering log — languages, distributed systems, infrastructure, and the side projects where I try things before putting them in production.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!-- Inline theme init — reads localStorage before React hydrates (prevents flash) -->
+    <script is:inline>
+      (function () {
+        var defaults = { themeName: 'terminal', mode: 'dark', typeName: 'geoSans' };
+        try {
+          var saved = JSON.parse(localStorage.getItem('readme:theme') || '{}');
+          Object.assign(defaults, saved);
+        } catch {}
+        var themes = {
+          terminal: {
+            light: { bg:'#fafafa', surface:'#ffffff', surfaceAlt:'#f0f0f0', border:'#e0e0e0', borderStrong:'#c8c8c8', text:'#0a0a0a', textMuted:'#5a5a5a', textSubtle:'#909090', accent:'#0d7a3f', accentText:'#ffffff', tag:'#eeeeee', tagText:'#3a3a3a', code:'#0a0a0a', codeBg:'#f4f4f4', overlay:'rgba(10,10,10,0.6)' },
+            dark:  { bg:'#0a0c0a', surface:'#111511', surfaceAlt:'#161b16', border:'#242a24', borderStrong:'#3a433a', text:'#e8eee6', textMuted:'#8a9488', textSubtle:'#5a655a', accent:'#4ade80', accentText:'#0a0c0a', tag:'#1a201a', tagText:'#a8b0a6', code:'#d0d8ce', codeBg:'#0f130f', overlay:'rgba(0,0,0,0.75)' },
+          },
+          paper: {
+            light: { bg:'#faf8f5', surface:'#ffffff', surfaceAlt:'#f2efe9', border:'#e6e1d7', borderStrong:'#d4cdbe', text:'#1a1814', textMuted:'#6b655b', textSubtle:'#9a9286', accent:'#b45632', accentText:'#ffffff', tag:'#edeae2', tagText:'#5a5247', code:'#2d2a24', codeBg:'#f5f2ec', overlay:'rgba(26,24,20,0.55)' },
+            dark:  { bg:'#14120f', surface:'#1c1a16', surfaceAlt:'#24211c', border:'#34302a', borderStrong:'#4a453e', text:'#f5f1ea', textMuted:'#a89f91', textSubtle:'#6b655b', accent:'#d87a54', accentText:'#14120f', tag:'#2a2722', tagText:'#b8ae9e', code:'#e8e2d6', codeBg:'#201d18', overlay:'rgba(0,0,0,0.65)' },
+          },
+          docs: {
+            light: { bg:'#ffffff', surface:'#ffffff', surfaceAlt:'#f7f8fa', border:'#e5e8ec', borderStrong:'#c8cdd4', text:'#0f1419', textMuted:'#5b6470', textSubtle:'#8b94a0', accent:'#2563eb', accentText:'#ffffff', tag:'#eef1f6', tagText:'#3b4552', code:'#0f1419', codeBg:'#f4f6f9', overlay:'rgba(15,20,25,0.55)' },
+            dark:  { bg:'#0c1016', surface:'#141922', surfaceAlt:'#1a2030', border:'#242b38', borderStrong:'#38414f', text:'#e8ecf2', textMuted:'#8b94a5', textSubtle:'#5b6373', accent:'#60a5fa', accentText:'#0c1016', tag:'#1c2230', tagText:'#a8b0bf', code:'#d8dde5', codeBg:'#10141b', overlay:'rgba(0,0,0,0.65)' },
+          },
+          glass: {
+            light: { bg:'#ece8f8', surface:'rgba(255,255,255,0.55)', surfaceAlt:'rgba(255,255,255,0.35)', border:'rgba(120,80,220,0.15)', borderStrong:'rgba(120,80,220,0.30)', text:'#1a0f2e', textMuted:'#5a4a7a', textSubtle:'#9080b0', accent:'#7c3aed', accentText:'#ffffff', tag:'rgba(124,58,237,0.10)', tagText:'#4c1d95', code:'#1a0f2e', codeBg:'rgba(255,255,255,0.65)', overlay:'rgba(26,15,46,0.40)' },
+            dark:  { bg:'#0d0818', surface:'rgba(255,255,255,0.06)', surfaceAlt:'rgba(255,255,255,0.10)', border:'rgba(255,255,255,0.10)', borderStrong:'rgba(255,255,255,0.22)', text:'#f0eeff', textMuted:'#a89fc0', textSubtle:'#6b6080', accent:'#c084fc', accentText:'#0d0818', tag:'rgba(255,255,255,0.08)', tagText:'#c0b0d8', code:'#e8e0ff', codeBg:'rgba(255,255,255,0.05)', overlay:'rgba(0,0,0,0.75)' },
+          },
+        };
+        var typePairs = {
+          geoSans:     { display:'"Space Grotesk","Pretendard",sans-serif', body:'"Inter","Pretendard",-apple-system,sans-serif', mono:'"JetBrains Mono",ui-monospace,Menlo,monospace' },
+          modernSerif: { display:'"Fraunces","Noto Serif KR",Georgia,serif', body:'"Inter","Pretendard",-apple-system,sans-serif', mono:'"JetBrains Mono",ui-monospace,Menlo,monospace' },
+          humanist:    { display:'"IBM Plex Sans","Pretendard",sans-serif', body:'"IBM Plex Sans","Pretendard",sans-serif', mono:'"IBM Plex Mono",ui-monospace,Menlo,monospace' },
+        };
+        var t = (themes[defaults.themeName] || themes.terminal)[defaults.mode] || themes.terminal.dark;
+        var tp = typePairs[defaults.typeName] || typePairs.geoSans;
+        var root = document.documentElement;
+        Object.entries(t).forEach(function([k,v]){ root.style.setProperty('--'+k, v); });
+        root.style.setProperty('--font-display', tp.display);
+        root.style.setProperty('--font-body', tp.body);
+        root.style.setProperty('--font-mono', tp.mono);
+        root.style.setProperty('color-scheme', defaults.mode);
+        document.documentElement.style.background = t.bg;
+        document.documentElement.style.color = t.text;
+      })();
+    </script>
+
+    <style>
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body { font-family: var(--font-body, 'Inter', sans-serif); -webkit-font-smoothing: antialiased; }
+      a { color: inherit; text-decoration: none; }
+      button { font-family: inherit; }
+      @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+      ::selection { background: var(--accent); color: var(--accentText); }
+      ::-webkit-scrollbar { width: 10px; height: 10px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--borderStrong); }
+
+      /* ── Liquid Glass theme ──────────────────────────── */
+      :root[data-theme="glass"] body {
+        min-height: 100vh;
+      }
+      /* Multi-orb bokeh background — fixed so it stays behind scrolling content */
+      :root[data-theme="glass"][data-mode="dark"] body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          radial-gradient(ellipse 70% 55% at 15% 15%, rgba(168,85,247,0.55) 0%, transparent 65%),
+          radial-gradient(ellipse 55% 70% at 85% 75%, rgba(59,130,246,0.50) 0%, transparent 65%),
+          radial-gradient(ellipse 45% 45% at 55% 35%, rgba(20,184,166,0.35) 0%, transparent 65%),
+          radial-gradient(ellipse 38% 38% at 80% 18%, rgba(236,72,153,0.28) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 50% at 30% 80%, rgba(99,102,241,0.30) 0%, transparent 60%),
+          #08040f;
+        pointer-events: none;
+      }
+      :root[data-theme="glass"][data-mode="light"] body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          radial-gradient(ellipse 70% 55% at 10% 10%, rgba(192,132,252,0.45) 0%, transparent 65%),
+          radial-gradient(ellipse 55% 65% at 88% 80%, rgba(147,197,253,0.50) 0%, transparent 65%),
+          radial-gradient(ellipse 45% 45% at 50% 30%, rgba(167,243,208,0.40) 0%, transparent 60%),
+          radial-gradient(ellipse 35% 35% at 75% 15%, rgba(253,186,116,0.30) 0%, transparent 55%),
+          radial-gradient(ellipse 50% 45% at 25% 75%, rgba(216,180,254,0.35) 0%, transparent 60%),
+          #e8e0f8;
+        pointer-events: none;
+      }
+      /* Glass pane: backdrop-filter applied via CSS so inline styles don't need changing */
+      :root[data-theme="glass"] .glass-pane {
+        backdrop-filter: blur(56px) saturate(200%) brightness(1.08) !important;
+        -webkit-backdrop-filter: blur(56px) saturate(200%) brightness(1.08) !important;
+      }
+      /* Specular top highlight on glass cards */
+      :root[data-theme="glass"][data-mode="dark"] .glass-pane {
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(0,0,0,0.15),
+                    0 20px 60px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.10) !important;
+      }
+      :root[data-theme="glass"][data-mode="light"] .glass-pane {
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.80), inset 0 -1px 0 rgba(0,0,0,0.06),
+                    0 12px 40px rgba(80,40,160,0.18), 0 0 0 1px rgba(200,180,255,0.35) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
