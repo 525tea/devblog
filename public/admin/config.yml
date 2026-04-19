@@ -1,0 +1,56 @@
+backend:
+  name: github
+  repo: 525tea/devblog
+  branch: main
+  base_url: https://read-me.pages.dev
+  auth_endpoint: /api/auth
+
+media_folder: public/images/posts
+public_folder: /images/posts
+
+collections:
+  - name: posts
+    label: Posts
+    label_singular: Post
+    folder: src/content/posts
+    create: true
+    delete: true
+    extension: mdx
+    format: frontmatter
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: title, widget: string }
+      - { label: "Date", name: date, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Excerpt", name: excerpt, widget: text }
+      - label: "Category"
+        name: cat
+        widget: select
+        options:
+          - { label: "Project", value: project }
+          - { label: "Backend", value: backend }
+          - { label: "CS", value: cs }
+          - { label: "DevOps", value: devops }
+      - label: "Subcategory"
+        name: sub
+        widget: select
+        options:
+          - { label: "Project (project)", value: project }
+          - { label: "Java (backend)", value: java }
+          - { label: "Python (backend)", value: python }
+          - { label: "API Design (backend)", value: api }
+          - { label: "Concurrency (backend)", value: concurrency }
+          - { label: "OS (cs)", value: os }
+          - { label: "Network (cs)", value: network }
+          - { label: "Database (cs)", value: db }
+          - { label: "Distributed Systems (cs)", value: distributed }
+          - { label: "Architecture (cs)", value: arch }
+          - { label: "Infrastructure (devops)", value: infra }
+          - { label: "Containers (devops)", value: container }
+          - { label: "CI/CD (devops)", value: cicd }
+          - { label: "Monitoring (devops)", value: monitoring }
+      - { label: "Tags", name: tags, widget: list, default: [] }
+      - { label: "Read Time (min)", name: readMin, widget: number, required: false }
+      - { label: "Series", name: series, widget: string, required: false }
+      - { label: "Pinned", name: pinned, widget: boolean, default: false }
+      - { label: "Draft", name: draft, widget: boolean, default: true }
+      - { label: "Body", name: body, widget: markdown }
